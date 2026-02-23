@@ -1,7 +1,4 @@
 import {
-  Phone,
-  MapPin,
-  Globe,
   Star,
   TrendingUp,
   LayoutGrid,
@@ -31,57 +28,11 @@ function StarRow({
             fill: i < filled ? "#FBBC04" : "transparent",
             stroke: i < filled ? "transparent" : "rgba(60,64,67,0.20)",
             strokeWidth: i < filled ? 0 : 2,
-            opacity: muted ? 0.55 : 1,
+            opacity: muted ? 0.45 : 1,
           }}
         />
       ))}
     </div>
-  )
-}
-
-/* ───── Action button: icon-only on desktop, icon+label on mobile ───── */
-function ActionButton({
-  icon,
-  label,
-  iconColor,
-}: {
-  icon: React.ReactNode
-  label: string
-  iconColor: string
-}) {
-  return (
-    <button
-      type="button"
-      className="flex items-center justify-center gap-1.5 rounded-full border font-medium"
-      style={{
-        border: "1px solid rgba(60,64,67,0.16)",
-        background: "#fff",
-        color: "var(--ink-900)",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-      }}
-      aria-label={label}
-    >
-      {/* Mobile: icon + text, full chip */}
-      <span
-        className="flex items-center gap-1.5 md:hidden"
-        style={{ padding: "0 12px", height: "32px", fontSize: "12px" }}
-      >
-        <span style={{ color: iconColor }} className="shrink-0 flex items-center">
-          {icon}
-        </span>
-        <span className="truncate">{label}</span>
-      </span>
-      {/* Desktop: icon only, circular */}
-      <span
-        className="hidden items-center justify-center md:flex"
-        style={{ width: "36px", height: "36px" }}
-      >
-        <span style={{ color: iconColor }} className="flex items-center">
-          {icon}
-        </span>
-        <span className="sr-only">{label}</span>
-      </span>
-    </button>
   )
 }
 
@@ -99,9 +50,9 @@ function KpiChip({
     <div
       className="flex flex-1 flex-col gap-0.5 rounded-xl border px-3 py-2"
       style={{
-        background: "var(--wash)",
+        background: delta ? "rgba(52,168,83,0.03)" : "var(--wash)",
         borderColor: delta
-          ? "rgba(52,168,83,0.15)"
+          ? "rgba(52,168,83,0.18)"
           : "rgba(11,18,32,0.06)",
       }}
     >
@@ -114,20 +65,20 @@ function KpiChip({
       <div className="flex items-center gap-1.5">
         <span
           className="text-lg font-semibold sm:text-xl"
-          style={{ color: "var(--ink-900)" }}
+          style={{ color: delta ? "#1e7e34" : "var(--ink-900)" }}
         >
           {value}
         </span>
         {delta && (
           <span
-            className="inline-flex items-center gap-0.5 rounded-full border px-2 py-0.5 text-xs font-semibold"
+            className="inline-flex items-center gap-0.5 rounded-full border px-2 py-0.5 text-xs font-bold"
             style={{
-              background: "rgba(52,168,83,0.08)",
+              background: "rgba(52,168,83,0.10)",
               color: "#1e7e34",
-              borderColor: "rgba(52,168,83,0.18)",
+              borderColor: "rgba(52,168,83,0.22)",
             }}
           >
-            <TrendingUp className="h-2.5 w-2.5" />
+            <TrendingUp className="h-3 w-3" />
             {delta}
           </span>
         )}
@@ -146,10 +97,11 @@ function MapPlaceholder({
 }) {
   return (
     <div
-      className="relative h-20 w-full overflow-hidden rounded-xl border sm:h-28"
+      className="relative w-full overflow-hidden rounded-xl border"
       style={{
+        height: accented ? "88px" : "72px",
         background: "#F6F9FC",
-        borderColor: "rgba(60,64,67,0.08)",
+        borderColor: accented ? "rgba(52,168,83,0.12)" : "rgba(60,64,67,0.08)",
       }}
     >
       {/* Neighborhood blocks + park + water */}
@@ -160,37 +112,37 @@ function MapPlaceholder({
         preserveAspectRatio="none"
       >
         {/* Neighborhood blocks */}
-        <rect x="20" y="18" width="60" height="35" rx="4" fill="rgba(66,133,244,0.05)" />
-        <rect x="110" y="50" width="50" height="40" rx="4" fill="rgba(66,133,244,0.04)" />
-        <rect x="250" y="15" width="70" height="30" rx="4" fill="rgba(66,133,244,0.05)" />
-        <rect x="320" y="70" width="55" height="35" rx="4" fill="rgba(66,133,244,0.04)" />
+        <rect x="20" y="18" width="60" height="35" rx="4" fill={accented ? "rgba(66,133,244,0.07)" : "rgba(66,133,244,0.03)"} />
+        <rect x="110" y="50" width="50" height="40" rx="4" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
+        <rect x="250" y="15" width="70" height="30" rx="4" fill={accented ? "rgba(66,133,244,0.07)" : "rgba(66,133,244,0.03)"} />
+        <rect x="320" y="70" width="55" height="35" rx="4" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
         {/* Park (green) */}
-        <ellipse cx="200" cy="110" rx="45" ry="22" fill="rgba(52,168,83,0.08)" />
+        <ellipse cx="200" cy="110" rx="45" ry="22" fill={accented ? "rgba(52,168,83,0.10)" : "rgba(52,168,83,0.04)"} />
         {/* Water strip (blue) */}
-        <path d="M0 120 C50 115, 120 125, 180 118 C240 111, 310 122, 400 116 L400 140 L0 140 Z" fill="rgba(66,133,244,0.06)" />
+        <path d="M0 120 C50 115, 120 125, 180 118 C240 111, 310 122, 400 116 L400 140 L0 140 Z" fill={accented ? "rgba(66,133,244,0.08)" : "rgba(66,133,244,0.03)"} />
         {/* Major roads */}
         <path
           d="M0 55 C70 42, 150 62, 220 48 C280 38, 350 52, 400 45"
-          stroke="rgba(60,64,67,0.10)"
+          stroke={accented ? "rgba(60,64,67,0.12)" : "rgba(60,64,67,0.06)"}
           strokeWidth="3.5"
           strokeLinecap="round"
         />
         <path
           d="M0 85 C90 78, 170 90, 260 82 C320 76, 360 86, 400 80"
-          stroke="rgba(60,64,67,0.07)"
+          stroke={accented ? "rgba(60,64,67,0.09)" : "rgba(60,64,67,0.04)"}
           strokeWidth="2.5"
           strokeLinecap="round"
         />
         {/* Cross streets */}
         <path
           d="M100 0 C105 30, 95 70, 100 140"
-          stroke="rgba(60,64,67,0.06)"
+          stroke={accented ? "rgba(60,64,67,0.08)" : "rgba(60,64,67,0.03)"}
           strokeWidth="2"
           strokeLinecap="round"
         />
         <path
           d="M280 0 C275 35, 285 75, 278 140"
-          stroke="rgba(60,64,67,0.05)"
+          stroke={accented ? "rgba(60,64,67,0.07)" : "rgba(60,64,67,0.03)"}
           strokeWidth="2"
           strokeLinecap="round"
         />
@@ -203,7 +155,7 @@ function MapPlaceholder({
           backgroundImage:
             "radial-gradient(circle, rgba(11,18,32,0.06) 1px, transparent 1px)",
           backgroundSize: "16px 16px",
-          opacity: 0.4,
+          opacity: accented ? 0.4 : 0.2,
         }}
       />
 
@@ -253,26 +205,16 @@ function MapPlaceholder({
           <div
             className="absolute rounded-full"
             style={{
-              width: 9, height: 9,
+              width: 7, height: 7,
               top: "35%", left: "40%",
-              background: "#EA4335",
-              boxShadow: "0 0 0 2px rgba(234,67,53,0.18)",
-              opacity: 0.7,
-            }}
-          />
-          <div
-            className="absolute rounded-full"
-            style={{
-              width: 6, height: 6,
-              top: "55%", left: "58%",
-              background: "rgba(11,18,32,0.12)",
+              background: "rgba(234,67,53,0.4)",
             }}
           />
           <div
             className="absolute rounded-full"
             style={{
               width: 5, height: 5,
-              top: "30%", left: "72%",
+              top: "55%", left: "58%",
               background: "rgba(11,18,32,0.08)",
             }}
           />
@@ -291,33 +233,6 @@ function MapPlaceholder({
         {label}
       </div>
     </div>
-  )
-}
-
-/* ───── Status dot + label ───── */
-function StatusLabel({
-  label,
-  variant,
-}: {
-  label: string
-  variant: "red" | "green"
-}) {
-  return (
-    <span className="flex items-center gap-1.5 text-xs font-medium">
-      <span
-        className="inline-block h-1.5 w-1.5 rounded-full"
-        style={{
-          background: variant === "red" ? "#EA4335" : "#34A853",
-        }}
-      />
-      <span
-        style={{
-          color: variant === "red" ? "#c5221f" : "#1e7e34",
-        }}
-      >
-        {label}
-      </span>
-    </span>
   )
 }
 
@@ -425,42 +340,40 @@ export function BeforeAfterCard() {
 
         {/* Inner content */}
         <div className="px-5 pb-5 pt-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-5 sm:grid-cols-2">
             {/* ─── BEFORE panel ─── */}
             <div
-              className="flex flex-col gap-2.5 rounded-xl border p-5"
+              className="flex flex-col gap-3 rounded-xl border p-5"
               style={{
-                background: "rgba(234,67,53,0.025)",
-                borderColor: "rgba(234,67,53,0.18)",
-                opacity: 0.94,
+                background: "rgba(0,0,0,0.015)",
+                borderColor: "rgba(11,18,32,0.08)",
               }}
             >
-              {/* Panel header */}
-              <div className="flex items-center justify-between">
+              {/* Panel header — just the badge */}
+              <div>
                 <span
-                  className="rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
+                  className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide"
                   style={{
-                    background: "rgba(234,67,53,0.08)",
-                    color: "#c5221f",
-                    borderColor: "rgba(234,67,53,0.18)",
+                    background: "rgba(11,18,32,0.04)",
+                    color: "rgba(95,99,104,0.8)",
+                    borderColor: "rgba(11,18,32,0.08)",
                   }}
                 >
                   Before
                 </span>
-                <StatusLabel label="Low visibility" variant="red" />
               </div>
 
               {/* Business name — NO badge */}
               <div>
                 <p
                   className="font-semibold"
-                  style={{ color: "var(--ink-900)", fontSize: "16px" }}
+                  style={{ color: "var(--ink-900)", fontSize: "16px", opacity: 0.65 }}
                 >
                   Your Business
                 </p>
                 <p
                   className="mt-0.5"
-                  style={{ color: "var(--muted-600)", fontSize: "13px" }}
+                  style={{ color: "var(--muted-600)", fontSize: "13px", opacity: 0.6 }}
                 >
                   {"Service business \u2022 Irvine, CA"}
                 </p>
@@ -471,32 +384,13 @@ export function BeforeAfterCard() {
                 <StarRow filled={3} muted />
                 <span
                   className="font-semibold"
-                  style={{ color: "var(--ink-900)", opacity: 0.7, fontSize: "14px" }}
+                  style={{ color: "var(--ink-900)", opacity: 0.5, fontSize: "14px" }}
                 >
                   3.9
                 </span>
-                <span style={{ color: "rgba(95,99,104,0.8)", fontSize: "12px" }}>
+                <span style={{ color: "rgba(95,99,104,0.5)", fontSize: "12px" }}>
                   (12)
                 </span>
-              </div>
-
-              {/* Action buttons — icon-only desktop, full on mobile */}
-              <div className="flex items-center gap-2">
-                <ActionButton
-                  icon={<Phone className="h-4 w-4" />}
-                  label="Call"
-                  iconColor="rgba(60,64,67,0.55)"
-                />
-                <ActionButton
-                  icon={<MapPin className="h-4 w-4" />}
-                  label="Directions"
-                  iconColor="rgba(60,64,67,0.55)"
-                />
-                <ActionButton
-                  icon={<Globe className="h-4 w-4" />}
-                  label="Website"
-                  iconColor="rgba(60,64,67,0.55)"
-                />
               </div>
 
               {/* Map placeholder */}
@@ -511,29 +405,38 @@ export function BeforeAfterCard() {
 
             {/* ─── AFTER panel ─── */}
             <div
-              className="flex flex-col gap-2.5 rounded-xl border p-5"
+              className="relative flex flex-col gap-3 rounded-xl border p-5"
               style={{
                 background:
-                  "linear-gradient(180deg, rgba(52,168,83,0.04), rgba(255,255,255,1) 60%)",
-                borderColor: "rgba(52,168,83,0.22)",
+                  "linear-gradient(180deg, rgba(52,168,83,0.04) 0%, rgba(255,255,255,1) 50%)",
+                borderColor: "rgba(52,168,83,0.25)",
                 boxShadow:
-                  "0 14px 35px rgba(11,18,32,0.10), 0 0 0 1px rgba(52,168,83,0.12)",
+                  "0 20px 50px rgba(52,168,83,0.12), 0 8px 20px rgba(11,18,32,0.08), 0 0 0 1px rgba(52,168,83,0.08)",
+                transform: "scale(1.02)",
+                transformOrigin: "center center",
               }}
             >
-              {/* Panel header */}
-              <div className="flex items-center justify-between">
+              {/* Subtle green top accent line */}
+              <div
+                className="absolute left-0 right-0 top-0 rounded-t-xl"
+                style={{
+                  height: "3px",
+                  background: "linear-gradient(90deg, #34A853, #4285F4)",
+                }}
+              />
+
+              {/* Panel header — just the badge */}
+              <div>
                 <span
-                  className="rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide"
+                  className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide"
                   style={{
                     background: "rgba(52,168,83,0.10)",
                     color: "#1e7e34",
-                    borderColor: "rgba(52,168,83,0.20)",
-                    boxShadow: "0 0 0 1px rgba(66,133,244,0.08)",
+                    borderColor: "rgba(52,168,83,0.22)",
                   }}
                 >
                   After
                 </span>
-                <StatusLabel label="Visibility improving" variant="green" />
               </div>
 
               {/* Business name — WITH verified badge */}
@@ -574,25 +477,6 @@ export function BeforeAfterCard() {
                 <span style={{ color: "rgba(95,99,104,0.8)", fontSize: "12px" }}>
                   (128)
                 </span>
-              </div>
-
-              {/* Action buttons — icon-only desktop, full on mobile */}
-              <div className="flex items-center gap-2">
-                <ActionButton
-                  icon={<Phone className="h-4 w-4" />}
-                  label="Call"
-                  iconColor="#34A853"
-                />
-                <ActionButton
-                  icon={<MapPin className="h-4 w-4" />}
-                  label="Directions"
-                  iconColor="#4285F4"
-                />
-                <ActionButton
-                  icon={<Globe className="h-4 w-4" />}
-                  label="Website"
-                  iconColor="#5F6368"
-                />
               </div>
 
               {/* Map placeholder */}
