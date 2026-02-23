@@ -193,12 +193,11 @@ export function HeroSection() {
                 Grow on Google.
                 {/* Gradient highlight bar behind the baseline */}
                 <span
-                  className="absolute -z-10 rounded-full"
+                  className="absolute -z-10 rounded-full bottom-[2px] sm:bottom-[4px] lg:bottom-[8px]"
                   style={{
                     height: "8px",
                     left: "-6px",
                     right: "-6px",
-                    bottom: "8px",
                     background:
                       "linear-gradient(90deg, var(--brand-cyan), var(--brand-blue))",
                     opacity: 0.35,
