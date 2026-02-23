@@ -1,3 +1,6 @@
+"use client"
+
+import { useRef, useState, useCallback } from "react"
 import {
   Star,
   TrendingUp,
@@ -5,6 +8,7 @@ import {
   Search,
   FileText,
   BadgeCheck,
+  ArrowRight,
 } from "lucide-react"
 
 /* ───── Google-yellow Star Row ───── */
@@ -23,12 +27,12 @@ function StarRow({
         <Star
           key={i}
           style={{
-            width: "15px",
-            height: "15px",
+            width: "16px",
+            height: "16px",
             fill: i < filled ? "#FBBC04" : "transparent",
             stroke: i < filled ? "transparent" : "rgba(60,64,67,0.20)",
             strokeWidth: i < filled ? 0 : 2,
-            opacity: muted ? 0.45 : 1,
+            opacity: muted ? 0.4 : 1,
           }}
         />
       ))}
@@ -41,162 +45,134 @@ function KpiChip({
   label,
   value,
   delta,
+  muted,
 }: {
   label: string
   value: string
   delta?: string
+  muted?: boolean
 }) {
   return (
-    <div
-      className="flex flex-1 flex-col gap-0.5 rounded-xl border px-3 py-2"
-      style={{
-        background: delta ? "rgba(52,168,83,0.03)" : "var(--wash)",
-        borderColor: delta
-          ? "rgba(52,168,83,0.18)"
-          : "rgba(11,18,32,0.06)",
-      }}
-    >
-      <span
-        className="text-[11px] font-medium"
-        style={{ color: "var(--muted-600)" }}
+    <div className="relative flex-1">
+      {/* Delta pill floating above the box */}
+      {delta && (
+        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
+          <span
+            className="inline-flex items-center gap-0.5 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-bold shadow-sm"
+            style={{
+              background: "rgba(52,168,83,0.12)",
+              color: "#1e7e34",
+              borderColor: "rgba(52,168,83,0.25)",
+            }}
+          >
+            <TrendingUp className="h-2.5 w-2.5" />
+            {delta}
+          </span>
+        </div>
+      )}
+      <div
+        className="flex flex-col gap-0.5 rounded-lg border px-3 py-2.5"
+        style={{
+          background: delta ? "rgba(52,168,83,0.04)" : muted ? "rgba(0,0,0,0.015)" : "var(--wash)",
+          borderColor: delta
+            ? "rgba(52,168,83,0.18)"
+            : muted ? "rgba(11,18,32,0.05)" : "rgba(11,18,32,0.06)",
+        }}
       >
-        {label}
-      </span>
-      <div className="flex items-center gap-1.5">
         <span
-          className="text-lg font-semibold sm:text-xl"
-          style={{ color: delta ? "#1e7e34" : "var(--ink-900)" }}
+          className="text-[10px] font-medium uppercase tracking-wider"
+          style={{ color: muted ? "rgba(95,99,104,0.5)" : "var(--muted-600)" }}
+        >
+          {label}
+        </span>
+        <span
+          className="text-xl font-bold"
+          style={{
+            color: delta ? "#1e7e34" : muted ? "rgba(11,18,32,0.35)" : "var(--ink-900)",
+          }}
         >
           {value}
         </span>
-        {delta && (
-          <span
-            className="inline-flex items-center gap-0.5 rounded-full border px-2 py-0.5 text-xs font-bold"
-            style={{
-              background: "rgba(52,168,83,0.10)",
-              color: "#1e7e34",
-              borderColor: "rgba(52,168,83,0.22)",
-            }}
-          >
-            <TrendingUp className="h-3 w-3" />
-            {delta}
-          </span>
-        )}
       </div>
     </div>
   )
 }
 
-/* ───── Detailed illustrative map ───── */
-function MapPlaceholder({
-  label,
-  accented,
-}: {
-  label: string
-  accented?: boolean
-}) {
+/* ───── Mini illustrative map ───── */
+function MiniMap({ accented }: { accented?: boolean }) {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-xl border"
+      className="relative w-full overflow-hidden rounded-lg border"
       style={{
-        height: accented ? "88px" : "72px",
-        background: "#F6F9FC",
-        borderColor: accented ? "rgba(52,168,83,0.12)" : "rgba(60,64,67,0.08)",
+        height: "80px",
+        background: accented ? "#F4F9F5" : "#F7F8F9",
+        borderColor: accented ? "rgba(52,168,83,0.12)" : "rgba(11,18,32,0.05)",
       }}
     >
-      {/* Neighborhood blocks + park + water */}
       <svg
         className="absolute inset-0 h-full w-full"
-        viewBox="0 0 400 140"
+        viewBox="0 0 400 120"
         fill="none"
         preserveAspectRatio="none"
       >
-        {/* Neighborhood blocks */}
-        <rect x="20" y="18" width="60" height="35" rx="4" fill={accented ? "rgba(66,133,244,0.07)" : "rgba(66,133,244,0.03)"} />
-        <rect x="110" y="50" width="50" height="40" rx="4" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
-        <rect x="250" y="15" width="70" height="30" rx="4" fill={accented ? "rgba(66,133,244,0.07)" : "rgba(66,133,244,0.03)"} />
-        <rect x="320" y="70" width="55" height="35" rx="4" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
-        {/* Park (green) */}
-        <ellipse cx="200" cy="110" rx="45" ry="22" fill={accented ? "rgba(52,168,83,0.10)" : "rgba(52,168,83,0.04)"} />
-        {/* Water strip (blue) */}
-        <path d="M0 120 C50 115, 120 125, 180 118 C240 111, 310 122, 400 116 L400 140 L0 140 Z" fill={accented ? "rgba(66,133,244,0.08)" : "rgba(66,133,244,0.03)"} />
-        {/* Major roads */}
+        {/* Roads */}
         <path
-          d="M0 55 C70 42, 150 62, 220 48 C280 38, 350 52, 400 45"
-          stroke={accented ? "rgba(60,64,67,0.12)" : "rgba(60,64,67,0.06)"}
-          strokeWidth="3.5"
+          d="M0 45 C100 35, 200 55, 300 40 C350 35, 380 42, 400 38"
+          stroke={accented ? "rgba(60,64,67,0.10)" : "rgba(60,64,67,0.05)"}
+          strokeWidth="3"
           strokeLinecap="round"
         />
         <path
-          d="M0 85 C90 78, 170 90, 260 82 C320 76, 360 86, 400 80"
-          stroke={accented ? "rgba(60,64,67,0.09)" : "rgba(60,64,67,0.04)"}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-        {/* Cross streets */}
-        <path
-          d="M100 0 C105 30, 95 70, 100 140"
-          stroke={accented ? "rgba(60,64,67,0.08)" : "rgba(60,64,67,0.03)"}
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M280 0 C275 35, 285 75, 278 140"
+          d="M0 75 C120 68, 230 82, 350 72 C380 69, 395 74, 400 72"
           stroke={accented ? "rgba(60,64,67,0.07)" : "rgba(60,64,67,0.03)"}
           strokeWidth="2"
           strokeLinecap="round"
         />
+        {/* Blocks */}
+        <rect x="30" y="15" width="50" height="25" rx="3" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
+        <rect x="240" y="12" width="60" height="22" rx="3" fill={accented ? "rgba(66,133,244,0.06)" : "rgba(66,133,244,0.02)"} />
+        <rect x="310" y="60" width="45" height="28" rx="3" fill={accented ? "rgba(66,133,244,0.05)" : "rgba(66,133,244,0.015)"} />
+        {/* Park */}
+        <ellipse cx="180" cy="95" rx="40" ry="18" fill={accented ? "rgba(52,168,83,0.08)" : "rgba(52,168,83,0.02)"} />
       </svg>
 
-      {/* Very faint dot grid overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(11,18,32,0.06) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
-          opacity: accented ? 0.4 : 0.2,
-        }}
-      />
-
-      {/* Pins: Before = muted/red, After = blue/green */}
+      {/* Pins */}
       {accented ? (
         <>
           <div
             className="absolute rounded-full"
             style={{
-              width: 10, height: 10,
-              top: "28%", left: "30%",
+              width: 9, height: 9,
+              top: "25%", left: "30%",
               background: "#4285F4",
-              boxShadow: "0 0 0 3px rgba(66,133,244,0.25), 0 2px 4px rgba(0,0,0,0.12)",
+              boxShadow: "0 0 0 3px rgba(66,133,244,0.22), 0 1px 3px rgba(0,0,0,0.12)",
             }}
           />
           <div
             className="absolute rounded-full"
             style={{
-              width: 10, height: 10,
-              top: "50%", left: "58%",
+              width: 9, height: 9,
+              top: "48%", left: "56%",
               background: "#4285F4",
-              boxShadow: "0 0 0 3px rgba(66,133,244,0.22), 0 2px 4px rgba(0,0,0,0.12)",
+              boxShadow: "0 0 0 3px rgba(66,133,244,0.22), 0 1px 3px rgba(0,0,0,0.12)",
             }}
           />
           <div
             className="absolute rounded-full"
             style={{
-              width: 10, height: 10,
-              top: "38%", left: "76%",
+              width: 9, height: 9,
+              top: "35%", left: "75%",
               background: "#4285F4",
-              boxShadow: "0 0 0 3px rgba(66,133,244,0.22), 0 2px 4px rgba(0,0,0,0.12)",
+              boxShadow: "0 0 0 3px rgba(66,133,244,0.22), 0 1px 3px rgba(0,0,0,0.12)",
             }}
           />
-          {/* Activity dot */}
           <div
             className="absolute rounded-full"
             style={{
-              width: 7, height: 7,
-              top: "60%", left: "44%",
+              width: 6, height: 6,
+              top: "58%", left: "42%",
               background: "#34A853",
-              boxShadow: "0 0 0 2px rgba(52,168,83,0.25)",
+              boxShadow: "0 0 0 2px rgba(52,168,83,0.22)",
             }}
           />
         </>
@@ -205,17 +181,17 @@ function MapPlaceholder({
           <div
             className="absolute rounded-full"
             style={{
-              width: 7, height: 7,
-              top: "35%", left: "40%",
-              background: "rgba(234,67,53,0.4)",
+              width: 6, height: 6,
+              top: "35%", left: "42%",
+              background: "rgba(11,18,32,0.10)",
             }}
           />
           <div
             className="absolute rounded-full"
             style={{
               width: 5, height: 5,
-              top: "55%", left: "58%",
-              background: "rgba(11,18,32,0.08)",
+              top: "52%", left: "60%",
+              background: "rgba(11,18,32,0.06)",
             }}
           />
         </>
@@ -223,14 +199,14 @@ function MapPlaceholder({
 
       {/* Label chip */}
       <div
-        className="absolute bottom-2 left-2 rounded-full border px-2.5 py-1 text-[10px] font-medium backdrop-blur-sm"
+        className="absolute bottom-1.5 left-1.5 rounded-full border px-2 py-0.5 text-[9px] font-medium"
         style={{
-          background: accented ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.90)",
-          color: accented ? "#1e7e34" : "#c5221f",
-          borderColor: accented ? "rgba(52,168,83,0.20)" : "rgba(234,67,53,0.18)",
+          background: accented ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.85)",
+          color: accented ? "#1e7e34" : "rgba(95,99,104,0.7)",
+          borderColor: accented ? "rgba(52,168,83,0.18)" : "rgba(11,18,32,0.06)",
         }}
       >
-        {label}
+        {accented ? "More map exposure" : "Not in top 3"}
       </div>
     </div>
   )
@@ -247,7 +223,7 @@ function FeaturePill({
   iconColor: string
 }) {
   return (
-    <span className="inline-flex shrink-0 items-center gap-1.5" style={{ fontSize: "13px" }}>
+    <span className="inline-flex shrink-0 items-center gap-1.5" style={{ fontSize: "12px" }}>
       <span className="flex items-center" style={{ color: iconColor }}>
         {icon}
       </span>
@@ -262,44 +238,77 @@ function FeaturePill({
    MAIN COMPONENT
    ═════════════════════════════════════════════════ */
 export function BeforeAfterCard() {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number>(0)
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 })
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    rafRef.current = requestAnimationFrame(() => {
+      if (!cardRef.current) return
+      const rect = cardRef.current.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width  // 0 to 1
+      const y = (e.clientY - rect.top) / rect.height   // 0 to 1
+      const rotateY = (x - 0.5) * 16   // ±8 degrees
+      const rotateX = (0.5 - y) * 12   // ±6 degrees
+      setTilt({ rotateX, rotateY, glareX: x * 100, glareY: y * 100 })
+    })
+  }, [])
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), [])
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false)
+    setTilt({ rotateX: 0, rotateY: 0, glareX: 50, glareY: 50 })
+  }, [])
+
   return (
-    <div className="relative w-full max-w-[92vw] lg:max-w-[1040px] lg:translate-x-6 lg:translate-y-2 lg:scale-[1.08]">
+    <div
+      className="relative w-full max-w-[92vw] lg:max-w-[1040px] lg:translate-x-6 lg:translate-y-2"
+      style={{ perspective: "1200px" }}
+    >
       {/* ─── Main card ─── */}
       <div
+        ref={cardRef}
         className="relative overflow-hidden rounded-2xl border"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         style={{
           background: "var(--card)",
           borderColor: "var(--hairline)",
-          boxShadow:
-            "0 40px 90px rgba(11,18,32,0.18), 0 0 0 1px rgba(0,0,0,0.03)",
+          boxShadow: isHovered
+            ? "0 50px 100px rgba(11,18,32,0.22), 0 20px 40px rgba(11,18,32,0.10), 0 0 0 1px rgba(0,0,0,0.03)"
+            : "0 40px 90px rgba(11,18,32,0.18), 0 0 0 1px rgba(0,0,0,0.03)",
+          transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) ${isHovered ? "translateZ(12px)" : "translateZ(0px)"}`,
+          transition: isHovered
+            ? "transform 0.1s ease-out, box-shadow 0.3s ease"
+            : "transform 0.5s ease-out, box-shadow 0.5s ease",
+          transformStyle: "preserve-3d",
+          willChange: "transform",
         }}
       >
+        {/* Glare highlight overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 z-20 rounded-2xl"
+          style={{
+            background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255,255,255,0.18) 0%, transparent 60%)`,
+            opacity: isHovered ? 1 : 0,
+            transition: "opacity 0.3s ease",
+          }}
+        />
+
         {/* Chrome top bar */}
         <div
-          className="flex h-11 items-center border-b px-4"
+          className="flex h-10 items-center border-b px-4"
           style={{
             borderColor: "rgba(11,18,32,0.06)",
             background: "#F6F9FC",
           }}
         >
-          {/* Traffic light dots */}
-          <div className="flex items-center gap-2">
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: "rgba(255,95,87,0.85)" }}
-            />
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: "rgba(254,188,46,0.85)" }}
-            />
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: "rgba(40,200,64,0.85)" }}
-            />
-          </div>
 
           {/* Google G icon + title */}
-          <div className="ml-2 flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <svg
               className="h-4 w-4 shrink-0"
               viewBox="0 0 186.69 190.5"
@@ -314,125 +323,187 @@ export function BeforeAfterCard() {
             </svg>
             <span
               className="text-[13px] font-semibold"
-              style={{ color: "var(--ink-900)", opacity: 0.9 }}
+              style={{ color: "var(--ink-900)", opacity: 0.85 }}
             >
               {"Google Results \u2014 Snapshot"}
             </span>
           </div>
 
-          {/* Spacer */}
           <div className="flex-1" />
 
-          {/* "More Leads from Google" pill — right side of chrome bar */}
+          {/* "More Leads from Google" pill */}
           <div
-            className="hidden items-center gap-1.5 rounded-full border px-3 py-1 sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border px-2.5 py-0.5 sm:flex"
             style={{
               background: "rgba(52,168,83,0.06)",
               borderColor: "rgba(52,168,83,0.22)",
             }}
           >
-            <TrendingUp className="h-3.5 w-3.5" style={{ color: "#34A853" }} />
-            <span className="text-xs font-semibold" style={{ color: "#1e7e34" }}>
+            <TrendingUp className="h-3 w-3" style={{ color: "#34A853" }} />
+            <span className="text-[11px] font-semibold" style={{ color: "#1e7e34" }}>
               More Leads from Google
             </span>
           </div>
         </div>
 
-        {/* Inner content */}
-        <div className="px-5 pb-5 pt-4">
-          <div className="grid gap-5 sm:grid-cols-2">
+        {/* Inner content — the two panels with a divider */}
+        <div className="overflow-hidden p-5 sm:p-6">
+          <div className="grid gap-0 sm:grid-cols-[1fr_auto_1fr]">
+
             {/* ─── BEFORE panel ─── */}
             <div
-              className="flex flex-col gap-3 rounded-xl border p-5"
+              className="flex flex-col gap-3 rounded-xl p-5"
               style={{
-                background: "rgba(0,0,0,0.015)",
-                borderColor: "rgba(11,18,32,0.08)",
+                background: "rgba(0,0,0,0.012)",
               }}
             >
-              {/* Panel header — just the badge */}
+              {/* Badge */}
               <div>
                 <span
-                  className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide"
+                  className="inline-block rounded-md px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
                   style={{
                     background: "rgba(11,18,32,0.04)",
-                    color: "rgba(95,99,104,0.8)",
-                    borderColor: "rgba(11,18,32,0.08)",
+                    color: "rgba(95,99,104,0.6)",
+                    letterSpacing: "0.08em",
                   }}
                 >
                   Before
                 </span>
               </div>
 
-              {/* Business name — NO badge */}
+              {/* Business name */}
               <div>
                 <p
                   className="font-semibold"
-                  style={{ color: "var(--ink-900)", fontSize: "16px", opacity: 0.65 }}
+                  style={{ color: "var(--ink-900)", fontSize: "16px", opacity: 0.5 }}
                 >
                   Your Business
                 </p>
                 <p
                   className="mt-0.5"
-                  style={{ color: "var(--muted-600)", fontSize: "13px", opacity: 0.6 }}
+                  style={{ color: "var(--muted-600)", fontSize: "13px", opacity: 0.5 }}
                 >
                   {"Service business \u2022 Irvine, CA"}
                 </p>
               </div>
 
               {/* Rating */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <StarRow filled={3} muted />
                 <span
-                  className="font-semibold"
-                  style={{ color: "var(--ink-900)", opacity: 0.5, fontSize: "14px" }}
+                  className="text-[14px] font-semibold"
+                  style={{ color: "var(--ink-900)", opacity: 0.35 }}
                 >
                   3.9
                 </span>
-                <span style={{ color: "rgba(95,99,104,0.5)", fontSize: "12px" }}>
+                <span style={{ color: "rgba(95,99,104,0.35)", fontSize: "12px" }}>
                   (12)
                 </span>
               </div>
 
-              {/* Map placeholder */}
-              <MapPlaceholder label="Not in top 3" />
+              {/* Map */}
+              <MiniMap />
 
               {/* KPI row */}
               <div className="flex gap-3">
-                <KpiChip label="Calls / week" value="4" />
-                <KpiChip label="Website visits" value="22" />
+                <KpiChip label="Calls / week" value="4" muted />
+                <KpiChip label="Website visits" value="22" muted />
+              </div>
+            </div>
+
+            {/* ─── CENTER DIVIDER with arrow ─── */}
+            <div className="hidden items-center justify-center sm:flex" style={{ width: "36px" }}>
+              <div className="flex flex-col items-center gap-2">
+                {/* Vertical dashed line */}
+                <div
+                  style={{
+                    width: "1px",
+                    height: "60px",
+                    background: "repeating-linear-gradient(to bottom, rgba(11,18,32,0.08) 0px, rgba(11,18,32,0.08) 4px, transparent 4px, transparent 8px)",
+                  }}
+                />
+                {/* Arrow circle */}
+                <div
+                  className="flex items-center justify-center rounded-full"
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    background: "linear-gradient(135deg, #34A853, #4285F4)",
+                    boxShadow: "0 4px 12px rgba(52,168,83,0.3), 0 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <ArrowRight className="h-4 w-4 text-white" />
+                </div>
+                {/* Vertical dashed line */}
+                <div
+                  style={{
+                    width: "1px",
+                    height: "60px",
+                    background: "repeating-linear-gradient(to bottom, rgba(11,18,32,0.08) 0px, rgba(11,18,32,0.08) 4px, transparent 4px, transparent 8px)",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Mobile divider arrow (horizontal) */}
+            <div className="flex items-center justify-center py-3 sm:hidden">
+              <div className="flex items-center gap-3">
+                <div
+                  style={{
+                    height: "1px",
+                    width: "40px",
+                    background: "repeating-linear-gradient(to right, rgba(11,18,32,0.08) 0px, rgba(11,18,32,0.08) 4px, transparent 4px, transparent 8px)",
+                  }}
+                />
+                <div
+                  className="flex items-center justify-center rounded-full"
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    background: "linear-gradient(135deg, #34A853, #4285F4)",
+                    boxShadow: "0 3px 10px rgba(52,168,83,0.25)",
+                    transform: "rotate(90deg)",
+                  }}
+                >
+                  <ArrowRight className="h-3.5 w-3.5 text-white" />
+                </div>
+                <div
+                  style={{
+                    height: "1px",
+                    width: "40px",
+                    background: "repeating-linear-gradient(to right, rgba(11,18,32,0.08) 0px, rgba(11,18,32,0.08) 4px, transparent 4px, transparent 8px)",
+                  }}
+                />
               </div>
             </div>
 
             {/* ─── AFTER panel ─── */}
             <div
-              className="relative flex flex-col gap-3 rounded-xl border p-5"
+              className="relative flex flex-col gap-3 overflow-hidden rounded-xl border-2 p-5"
               style={{
-                background:
-                  "linear-gradient(180deg, rgba(52,168,83,0.04) 0%, rgba(255,255,255,1) 50%)",
-                borderColor: "rgba(52,168,83,0.25)",
+                background: "linear-gradient(170deg, rgba(52,168,83,0.05) 0%, #ffffff 40%)",
+                borderColor: "rgba(52,168,83,0.28)",
                 boxShadow:
-                  "0 20px 50px rgba(52,168,83,0.12), 0 8px 20px rgba(11,18,32,0.08), 0 0 0 1px rgba(52,168,83,0.08)",
-                transform: "scale(1.02)",
-                transformOrigin: "center center",
+                  "0 16px 40px rgba(52,168,83,0.12), 0 6px 16px rgba(11,18,32,0.06)",
               }}
             >
-              {/* Subtle green top accent line */}
+              {/* Top accent bar */}
               <div
-                className="absolute left-0 right-0 top-0 rounded-t-xl"
+                className="absolute inset-x-0 top-0"
                 style={{
                   height: "3px",
                   background: "linear-gradient(90deg, #34A853, #4285F4)",
                 }}
               />
 
-              {/* Panel header — just the badge */}
+              {/* Badge */}
               <div>
                 <span
-                  className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide"
+                  className="inline-block rounded-md px-3 py-1 text-[11px] font-bold uppercase tracking-widest"
                   style={{
                     background: "rgba(52,168,83,0.10)",
                     color: "#1e7e34",
-                    borderColor: "rgba(52,168,83,0.22)",
+                    letterSpacing: "0.08em",
                   }}
                 >
                   After
@@ -442,14 +513,14 @@ export function BeforeAfterCard() {
               {/* Business name — WITH verified badge */}
               <div>
                 <p
-                  className="flex items-center gap-1.5 font-semibold"
+                  className="flex items-center gap-1 font-semibold"
                   style={{ color: "var(--ink-900)", fontSize: "16px" }}
                 >
                   Your Business
                   <BadgeCheck
                     style={{
-                      width: "18px",
-                      height: "18px",
+                      width: "16px",
+                      height: "16px",
                       color: "#1A73E8",
                       fill: "#1A73E8",
                       stroke: "#fff",
@@ -466,11 +537,11 @@ export function BeforeAfterCard() {
               </div>
 
               {/* Rating */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <StarRow filled={4} />
                 <span
-                  className="font-semibold"
-                  style={{ color: "var(--ink-900)", fontSize: "14px" }}
+                  className="text-[14px] font-semibold"
+                  style={{ color: "var(--ink-900)" }}
                 >
                   4.7
                 </span>
@@ -479,11 +550,11 @@ export function BeforeAfterCard() {
                 </span>
               </div>
 
-              {/* Map placeholder */}
-              <MapPlaceholder label="More map exposure" accented />
+              {/* Map */}
+              <MiniMap accented />
 
               {/* KPI row */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 pt-1">
                 <KpiChip label="Calls / week" value="18" delta="+350%" />
                 <KpiChip label="Website visits" value="96" delta="+336%" />
               </div>
@@ -492,29 +563,29 @@ export function BeforeAfterCard() {
 
           {/* ─── Bottom feature pills row ─── */}
           <div
-            className="mt-4 flex flex-wrap items-center justify-center border-t pt-4"
+            className="mt-4 flex flex-wrap items-center justify-center border-t pt-3"
             style={{
               borderColor: "rgba(11,18,32,0.06)",
-              gap: "8px 24px",
+              gap: "6px 20px",
             }}
           >
             <FeaturePill
-              icon={<LayoutGrid className="h-4 w-4" />}
+              icon={<LayoutGrid className="h-3.5 w-3.5" />}
               label="New Website"
               iconColor="#4285F4"
             />
             <FeaturePill
-              icon={<Search className="h-4 w-4" />}
+              icon={<Search className="h-3.5 w-3.5" />}
               label="SEO Optimized"
               iconColor="#EA4335"
             />
             <FeaturePill
-              icon={<Star className="h-4 w-4" style={{ fill: "#FBBC04", stroke: "transparent" }} />}
+              icon={<Star className="h-3.5 w-3.5" style={{ fill: "#FBBC04", stroke: "transparent" }} />}
               label="Review Generation"
               iconColor="#FBBC04"
             />
             <FeaturePill
-              icon={<FileText className="h-4 w-4" />}
+              icon={<FileText className="h-3.5 w-3.5" />}
               label="Lead Forms"
               iconColor="#34A853"
             />
@@ -522,8 +593,8 @@ export function BeforeAfterCard() {
 
           {/* Disclaimer */}
           <p
-            className="mt-3 text-center text-[11px]"
-            style={{ color: "var(--muted-600)", opacity: 0.8 }}
+            className="mt-2.5 text-center text-[10px]"
+            style={{ color: "var(--muted-600)", opacity: 0.7 }}
           >
             Illustrative example. Results vary by industry, competition, and
             location.
