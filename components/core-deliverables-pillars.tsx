@@ -8,6 +8,32 @@ export function CoreDeliverablesPillars() {
             className="relative w-full overflow-hidden border-t border-slate-100/50 pt-24 pb-16 lg:pb-24"
             style={{ backgroundColor: "var(--wash)" }}
         >
+            {/* Mobile Keyframes for automatic animation (since hover isn't present to trigger group-hover) */}
+            <style>{`
+                @media (max-width: 768px) {
+                    .mobile-animate-badge { animation: badge-reveal 4s ease-in-out infinite alternate; }
+                    @keyframes badge-reveal { 0%, 40% { opacity: 0; transform: translateY(8px); } 60%, 100% { opacity: 1; transform: translateY(0); } }
+                    .mobile-animate-pin { animation: pin-bounce 4s ease-in-out infinite alternate; }
+                    @keyframes pin-bounce { 0%, 40% { transform: translate(-50%, -50%) scale(1); } 60%, 100% { transform: translate(-50%, -105%) scale(1.1); } }
+                    .mobile-animate-card { animation: card-slide 4s ease-in-out infinite alternate; }
+                    @keyframes card-slide { 0%, 40% { transform: translateX(0); } 60%, 100% { transform: translateX(calc(100% + 8px)); } }
+                    .mobile-animate-notification { animation: notification-reveal 4s ease-in-out infinite alternate; }
+                    @keyframes notification-reveal { 0%, 40% { opacity: 0; transform: translateY(8px); } 60%, 100% { opacity: 1; transform: translateY(0); } }
+                    .mobile-animate-scroll { animation: feed-scroll 5s ease-in-out infinite alternate; }
+                    @keyframes feed-scroll { 0%, 30% { transform: translateY(0); } 70%, 100% { transform: translateY(-85px); } }
+                    .mobile-animate-glow { animation: glow-pulse 5s ease-in-out infinite alternate; }
+                    @keyframes glow-pulse { 0%, 30% { opacity: 0.5; } 70%, 100% { opacity: 1; } }
+                    .mobile-animate-heart-1 { animation: float-heart-1 3s ease-out infinite; }
+                    .mobile-animate-heart-2 { animation: float-heart-2 3.5s ease-out infinite 0.8s; }
+                    .mobile-animate-heart-3 { animation: float-heart-3 3.2s ease-out infinite 1.5s; }
+                    .mobile-animate-heart-4 { animation: float-heart-4 3.8s ease-out infinite 2s; }
+                    @keyframes float-heart-1 { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-32px); } }
+                    @keyframes float-heart-2 { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-48px); } }
+                    @keyframes float-heart-3 { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-24px); } }
+                    @keyframes float-heart-4 { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-40px); } }
+                }
+            `}</style>
+
             {/* 1px hairline gradient divider Top */}
             <div
                 className="absolute inset-x-0 top-0 h-[1px]"
@@ -141,7 +167,7 @@ export function CoreDeliverablesPillars() {
                                 </div>
                             </div>
                             {/* Hover badge */}
-                            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 shadow-md ring-1 ring-slate-100 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 shadow-md ring-1 ring-slate-100 opacity-0 translate-y-2 transition-all duration-300 md:group-hover:opacity-100 md:group-hover:translate-y-0 mobile-animate-badge">
                                 <TrendingUp className="h-3 w-3 text-emerald-500" />
                                 <span className="text-[9px] font-bold text-emerald-600">PageSpeed 98</span>
                             </div>
@@ -244,7 +270,7 @@ export function CoreDeliverablesPillars() {
                             </div>
 
                             {/* Your Business Pin (Hero) */}
-                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center transition-transform duration-500 group-hover:-translate-y-[55%] group-hover:scale-110">
+                            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center transition-transform duration-500 md:group-hover:-translate-y-[55%] md:group-hover:scale-110 mobile-animate-pin">
                                 {/* Pulse */}
                                 <div className="absolute left-1/2 top-2 -translate-x-1/2"><div className="h-12 w-12 rounded-full bg-emerald-400 opacity-20 animate-ping" /></div>
                                 <div className="h-9 w-9 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg ring-[3px] ring-white">
@@ -328,7 +354,7 @@ export function CoreDeliverablesPillars() {
                                             <span className="text-[7px] font-bold uppercase tracking-wide text-slate-400">New Lead</span>
                                             <span className="ml-auto text-[7px] font-bold text-blue-400 bg-blue-50 px-1 rounded">3</span>
                                         </div>
-                                        <div className="rounded-md border border-blue-200/60 bg-blue-50/50 p-1.5 shadow-sm transition-transform duration-700 group-hover:translate-x-[calc(100%+8px)]">
+                                        <div className="rounded-md border border-blue-200/60 bg-blue-50/50 p-1.5 shadow-sm transition-transform duration-700 md:group-hover:translate-x-[calc(100%+8px)] mobile-animate-card">
                                             <div className="h-1.5 w-12 rounded-full bg-blue-300" />
                                             <div className="mt-1 flex items-center gap-1">
                                                 <div className="h-1 w-6 rounded-full bg-blue-200" />
@@ -381,7 +407,7 @@ export function CoreDeliverablesPillars() {
                                 </div>
                             </div>
                             {/* Hover Notification */}
-                            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 shadow-md ring-1 ring-slate-100 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 delay-200">
+                            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 shadow-md ring-1 ring-slate-100 opacity-0 translate-y-2 transition-all duration-300 md:group-hover:opacity-100 md:group-hover:translate-y-0 delay-200 mobile-animate-notification">
                                 <MessageSquare className="h-3 w-3 text-indigo-500" />
                                 <span className="text-[9px] font-bold text-indigo-600">Auto Text Sent</span>
                             </div>
@@ -411,64 +437,122 @@ export function CoreDeliverablesPillars() {
                 </div>
 
                 {/* ════ HORIZONTAL SOCIAL MEDIA CARD (Bottom) ════ */}
-                <div className="mt-6 md:mt-8 max-w-[1000px] mx-auto xl:max-w-none group relative overflow-hidden rounded-[24px] border border-white/60 bg-white/50 p-6 md:p-8 transition-all duration-500 ease-out hover:-translate-y-1 hover:bg-white/70 flex flex-col md:flex-row items-center gap-6 md:gap-8 text-center md:text-left"
+                <div className="mt-6 md:mt-8 max-w-[1000px] mx-auto xl:max-w-none group relative overflow-hidden rounded-[24px] border border-white/60 bg-white/50 p-6 md:p-8 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-xl hover:bg-white/80 flex flex-col md:flex-row items-center gap-8 md:gap-12"
                     style={{
                         boxShadow: "0 20px 40px -15px rgba(11,18,32,0.05), inset 0 0 0 1px rgba(255,255,255,0.8)",
                         backdropFilter: "blur(24px)"
                     }}>
                     {/* Inner Sheen */}
-                    <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white to-transparent opacity-60 pointer-events-none" />
+                    <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white to-transparent opacity-80 pointer-events-none" />
 
-                    {/* Social Post Mockup — Two stacked cards */}
-                    <div className="relative w-[200px] shrink-0 space-y-2">
-                        {/* Post 1 */}
-                        <div className="overflow-hidden rounded-[14px] border border-slate-200/60 bg-white shadow-sm">
-                            <div className="p-2.5 space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-rose-400 to-orange-300" />
-                                    <div className="flex-1">
-                                        <div className="h-1.5 w-14 rounded-full bg-slate-800" />
-                                        <div className="mt-1 h-1 w-10 rounded-full bg-slate-200" />
+                    {/* Ambient Glow behind Mockup */}
+                    <div className="absolute left-[120px] top-1/2 -translate-y-1/2 h-[200px] w-[200px] rounded-full bg-rose-400/15 blur-[60px] pointer-events-none transition-opacity duration-500 md:group-hover:opacity-100 opacity-50 mobile-animate-glow" />
+
+                    {/* Left: Social Post Mockup Feed */}
+                    <div className="relative w-[240px] shrink-0 h-[210px] overflow-hidden rounded-[16px] [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]">
+                        <div className="flex flex-col gap-3 transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover:-translate-y-[85px] mobile-animate-scroll">
+
+                            {/* Post 1 */}
+                            <div className="relative overflow-hidden rounded-[14px] border border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-md">
+                                <div className="p-3 space-y-2.5">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="h-7 w-7 rounded-full bg-gradient-to-br from-rose-400 to-orange-300 ring-2 ring-white shadow-sm" />
+                                        <div className="flex-1">
+                                            <div className="h-2 w-16 rounded-full bg-slate-800" />
+                                            <div className="mt-1.5 h-1.5 w-12 rounded-full bg-slate-300" />
+                                        </div>
+                                        <div className="h-5 w-5 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+                                            <span className="text-[10px] text-slate-400 leading-none pb-1">...</span>
+                                        </div>
+                                    </div>
+                                    <div className="h-24 w-full rounded-lg bg-gradient-to-br from-rose-50 to-orange-50 border border-rose-100/60 flex items-center justify-center relative overflow-hidden group/img cursor-pointer">
+                                        <div className="absolute inset-0 bg-rose-400/10 mix-blend-overlay transition-opacity duration-500 opacity-0 group-hover/img:opacity-100" />
+                                        <div className="h-8 w-8 rounded-md bg-rose-200/80 shadow-sm transition-transform duration-500 group-hover/img:scale-110" />
+                                    </div>
+                                    <div className="flex items-center gap-3.5 pt-0.5">
+                                        <div className="flex items-center gap-1.5">
+                                            <Heart className="h-3.5 w-3.5 text-rose-500" fill="currentColor" />
+                                            <span className="text-[10px] font-bold text-rose-600">248</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <MessageSquare className="h-3.5 w-3.5 text-slate-400" />
+                                            <span className="text-[10px] font-bold text-slate-500">32</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5 ml-auto">
+                                            <Share2 className="h-3.5 w-3.5 text-slate-400" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="h-14 w-full rounded-lg bg-gradient-to-br from-rose-50 to-orange-50 border border-rose-100/50 flex items-center justify-center">
-                                    <div className="h-6 w-6 rounded bg-rose-200/60" />
+
+                                {/* Floating Likes Animation */}
+                                <div className="absolute bottom-6 left-6 flex flex-col items-center opacity-0 md:group-hover:opacity-100 transition-all duration-700 ease-out md:group-hover:-translate-y-8 mobile-animate-heart-1">
+                                    <Heart className="h-4 w-4 text-rose-500 drop-shadow-sm" fill="currentColor" />
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-1">
-                                        <Heart className="h-3 w-3 text-rose-500" fill="currentColor" />
-                                        <span className="text-[9px] font-bold text-rose-600">248</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <MessageSquare className="h-3 w-3 text-slate-400" />
-                                        <span className="text-[9px] font-bold text-slate-400">32</span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <Share2 className="h-3 w-3 text-slate-400" />
-                                        <span className="text-[9px] font-bold text-slate-400">14</span>
-                                    </div>
+                                <div className="absolute bottom-4 left-12 flex flex-col items-center opacity-0 md:group-hover:opacity-100 transition-all duration-[900ms] delay-100 ease-out md:group-hover:-translate-y-12 mobile-animate-heart-2">
+                                    <Heart className="h-2.5 w-2.5 text-rose-400 drop-shadow-sm" fill="currentColor" />
+                                </div>
+                                <div className="absolute bottom-8 left-2 flex flex-col items-center opacity-0 md:group-hover:opacity-100 transition-all duration-1000 delay-200 ease-out md:group-hover:-translate-y-6 mobile-animate-heart-3">
+                                    <Heart className="h-3.5 w-3.5 text-rose-500 drop-shadow-sm" fill="currentColor" />
+                                </div>
+                                <div className="absolute bottom-7 left-16 flex flex-col items-center opacity-0 md:group-hover:opacity-100 transition-all duration-[1100ms] delay-150 ease-out md:group-hover:-translate-y-10 mobile-animate-heart-4">
+                                    <Heart className="h-3 w-3 text-rose-300 drop-shadow-sm" fill="currentColor" />
                                 </div>
                             </div>
-                        </div>
-                        {/* Post 2 (peeking) */}
-                        <div className="overflow-hidden rounded-[14px] border border-slate-200/60 bg-white shadow-sm opacity-60">
-                            <div className="p-2.5">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300" />
-                                    <div className="flex-1">
-                                        <div className="h-1.5 w-14 rounded-full bg-slate-800" />
-                                        <div className="mt-1 h-1 w-10 rounded-full bg-slate-200" />
+
+                            {/* Post 2 */}
+                            <div className="relative overflow-hidden rounded-[14px] border border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-md flex-shrink-0">
+                                <div className="p-3 space-y-2.5">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="h-7 w-7 rounded-full bg-gradient-to-br from-indigo-400 to-cyan-300 ring-2 ring-white shadow-sm" />
+                                        <div className="flex-1">
+                                            <div className="h-2 w-16 rounded-full bg-slate-800" />
+                                            <div className="mt-1.5 h-1.5 w-12 rounded-full bg-slate-300" />
+                                        </div>
                                     </div>
+                                    <div className="h-16 w-full rounded-lg bg-gradient-to-br from-indigo-50 to-cyan-50 border border-indigo-100/60" />
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
-                    <div className="relative flex-1">
-                        <h3 className="text-[20px] font-bold text-slate-900">Plus, complete Social Media Management</h3>
-                        <p className="mt-1 text-[15px] font-medium text-slate-600">
+                    {/* Right: Content & Checkmarks */}
+                    <div className="relative flex-1 text-center md:text-left z-10">
+                        <div className="inline-flex items-center gap-1.5 mb-3 rounded-full bg-rose-50 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-rose-600 border border-rose-100/60 shadow-sm">
+                            <Heart className="h-3 w-3 text-rose-500" fill="currentColor" />
+                            Brand Growth
+                        </div>
+                        <h3 className="text-[24px] sm:text-[28px] font-bold text-slate-900 tracking-tight leading-tight">Plus, complete Social Media Management</h3>
+                        <p className="mt-2 text-[15px] sm:text-[16px] font-medium text-slate-600 leading-relaxed max-w-[500px] mx-auto md:mx-0">
                             Keep your brand top-of-mind with weekly engaging content that builds local authority and trust, entirely managed by us.
                         </p>
+
+                        <div className="mt-6 pt-6 border-t border-slate-200/50 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-[500px] mx-auto md:mx-0">
+                            <div className="flex items-start gap-2.5">
+                                <div className="mt-0.5 rounded-full bg-rose-100/80 p-0.5">
+                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-rose-600" />
+                                </div>
+                                <span className="text-[13.5px] font-semibold text-slate-700">Custom branded content</span>
+                            </div>
+                            <div className="flex items-start gap-2.5">
+                                <div className="mt-0.5 rounded-full bg-rose-100/80 p-0.5">
+                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-rose-600" />
+                                </div>
+                                <span className="text-[13.5px] font-semibold text-slate-700">Proactive engagement</span>
+                            </div>
+                            <div className="flex items-start gap-2.5">
+                                <div className="mt-0.5 rounded-full bg-rose-100/80 p-0.5">
+                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-rose-600" />
+                                </div>
+                                <span className="text-[13.5px] font-semibold text-slate-700">Local audience targeting</span>
+                            </div>
+                            <div className="flex items-start gap-2.5">
+                                <div className="mt-0.5 rounded-full bg-rose-100/80 p-0.5">
+                                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-rose-600" />
+                                </div>
+                                <span className="text-[13.5px] font-semibold text-slate-700">Brand authority building</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
