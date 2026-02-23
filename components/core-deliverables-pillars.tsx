@@ -16,6 +16,9 @@ export function CoreDeliverablesPillars() {
                 }}
             />
 
+            {/* Clean Dot Pattern Background */}
+            <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(#94a3b8_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.25] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,#000_30%,transparent_100%)]" />
+
             {/* Noise layer (3% opacity) */}
             <div
                 className="pointer-events-none absolute inset-0 z-0 opacity-[0.03]"

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Search, MapPin, Star, TrendingUp, CheckCircle2, Navigation, AlertCircle, Phone, Utensils, Heart, Store } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -224,6 +224,67 @@ export function TargetedTakeoverMap() {
     const [activeTab, setActiveTab] = useState<IndustryKey>("roofing")
     const data = industries[activeTab]
 
+    // Rotating Header Logic
+    const rotatingCategories = [
+        "Home Services",
+        "Aesthetics Clinics",
+        "Hospitality & Dining",
+        "Local Retail",
+        "Law Firms",
+        "Dental Practices",
+        "Real Estate Teams",
+        "Fitness Studios",
+        "Auto Repair Shops",
+        "Accountants & CPAs"
+    ]
+    const [categoryIndex, setCategoryIndex] = useState(0)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCategoryIndex(prev => (prev + 1) % rotatingCategories.length)
+        }, 1800)
+        return () => clearInterval(interval)
+    }, [])
+
+    // Mobile Auto-Scroll Logic
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const [isInteracting, setIsInteracting] = useState(false)
+
+    useEffect(() => {
+        const scrollContainer = scrollContainerRef.current
+        if (!scrollContainer || isInteracting) return
+
+        let animationFrameId: number
+        let direction = 1
+        let exactScroll = scrollContainer.scrollLeft
+
+        const autoScroll = () => {
+            // Only auto-scroll on screens smaller than 1024px
+            if (window.innerWidth < 1024) {
+                // Keep exactScroll in sync if user manually scrolls
+                if (Math.abs(exactScroll - scrollContainer.scrollLeft) > 2) {
+                    exactScroll = scrollContainer.scrollLeft
+                }
+
+                // If we reach the right end, reverse
+                if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth - 1) {
+                    direction = -1
+                }
+                // If we reach the left end, go forward
+                else if (scrollContainer.scrollLeft <= 0) {
+                    direction = 1
+                }
+
+                exactScroll += 0.5 * direction
+                scrollContainer.scrollLeft = exactScroll
+            }
+            animationFrameId = requestAnimationFrame(autoScroll)
+        }
+
+        animationFrameId = requestAnimationFrame(autoScroll)
+        return () => cancelAnimationFrame(animationFrameId)
+    }, [isInteracting])
+
     return (
         <section
             className="relative w-full overflow-hidden border-t border-slate-100/50 py-16 sm:py-24 lg:py-32"
@@ -263,19 +324,19 @@ export function TargetedTakeoverMap() {
                     </div>
 
                     <h2 className="text-[32px] sm:text-[36px] font-bold leading-[1.05] tracking-[-0.03em] text-[var(--ink-900)] md:text-[44px] lg:text-[48px] md:max-w-[800px] flex flex-col items-center">
-                        <span>Engineered for</span>
+                        <span>Rank #1 for</span>
                         <div className="relative h-[1.1em] w-full overflow-hidden flex justify-center mt-1">
                             {/* Animated Industry Category Flip */}
                             <AnimatePresence mode="popLayout">
                                 <motion.span
-                                    key={data.category}
+                                    key={categoryIndex}
                                     initial={{ y: 40, opacity: 0, rotateX: -90 }}
                                     animate={{ y: 0, opacity: 1, rotateX: 0 }}
                                     exit={{ y: -40, opacity: 0, rotateX: 90 }}
                                     transition={{ duration: 0.5, type: "spring", stiffness: 120, damping: 14 }}
-                                    className="block relative z-10 text-[var(--brand-cyan)]"
+                                    className="block relative z-10 text-[var(--brand-cyan)] text-center"
                                 >
-                                    {data.category}.
+                                    {rotatingCategories[categoryIndex]}.
                                     {/* Highlight underline */}
                                     <span
                                         className="absolute -z-10 rounded-md opacity-[0.15]"
@@ -306,7 +367,14 @@ export function TargetedTakeoverMap() {
                         <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#F6F9FC] to-transparent z-10 pointer-events-none lg:hidden" />
 
                         {/* Mobile: Horizontal scroll, Desktop: Vertical Stack */}
-                        <div className="flex lg:flex-col gap-3 overflow-x-auto pb-6 lg:pb-0 snap-x snap-mandatory hide-scrollbar lg:mx-0 lg:px-0">
+                        <div
+                            ref={scrollContainerRef}
+                            onTouchStart={() => setIsInteracting(true)}
+                            onTouchEnd={() => setIsInteracting(false)}
+                            onMouseEnter={() => setIsInteracting(true)}
+                            onMouseLeave={() => setIsInteracting(false)}
+                            className="flex lg:flex-col gap-3 overflow-x-auto pb-6 lg:pb-0 hide-scrollbar lg:mx-0 lg:px-0"
+                        >
                             {/* Start spacer for mobile so the first item aligns with page wrapper, but lets previous item bounce */}
                             <div className="shrink-0 w-2 lg:hidden"></div>
                             {(Object.keys(industries) as IndustryKey[]).map((key) => {
@@ -318,7 +386,7 @@ export function TargetedTakeoverMap() {
                                     <button
                                         key={key}
                                         onClick={() => setActiveTab(key)}
-                                        className={`group relative flex shrink-0 w-[260px] sm:w-[280px] lg:w-full flex-col items-start rounded-xl p-3 sm:p-4 text-left transition-all duration-300 border snap-start ${isActive
+                                        className={`group relative flex shrink-0 w-[260px] sm:w-[280px] lg:w-full flex-col items-start rounded-xl p-3 sm:p-4 text-left transition-all duration-300 border ${isActive
                                             ? "bg-white border-slate-200/60 shadow-[0_8px_30px_-15px_rgba(11,18,32,0.12)]"
                                             : "border-transparent hover:bg-white/50 bg-white/20"
                                             }`}

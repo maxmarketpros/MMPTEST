@@ -5,6 +5,7 @@ import { TargetedTakeoverMap } from "@/components/targeted-takeover-map"
 import { CostOfInaction } from "@/components/cost-of-inaction"
 import { GrowthCommandCenter } from "@/components/growth-command-center"
 import { PricingSection } from "@/components/pricing-section"
+import { OnboardingTimeline } from "@/components/onboarding-timeline"
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <TargetedTakeoverMap />
       <CostOfInaction />
       <PricingSection />
+      <OnboardingTimeline />
       <GrowthCommandCenter />
     </main>
   )
