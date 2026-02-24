@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, ArrowDown, MousePointerClick, Navigation } from "lucide-react"
 import Image from "next/image"
 
 type Showcase = {
@@ -121,29 +121,29 @@ export function WebsiteShowcaseSection() {
             <div className="relative z-10 mx-auto max-w-[1300px] px-6 lg:px-12">
 
                 {/* Minimalist Section Header */}
-                <div className="mb-10 lg:mb-12 text-center max-w-3xl mx-auto flex flex-col items-center">
-                    <div
-                        className="mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium shadow-sm"
-                        style={{
-                            background: "rgba(255,255,255,0.80)",
-                            borderColor: "var(--hairline)",
-                            color: "var(--text-700)",
-                        }}
-                    >
+                <div className="mb-10 lg:mb-14 text-center max-w-3xl mx-auto flex flex-col items-center">
+                    {/* Eyebrow Pill */}
+                    <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[11px] sm:text-[12px] font-bold tracking-widest text-slate-500 uppercase shadow-[0_2px_10px_rgba(0,0,0,0.04)] border border-slate-100">
                         <span className="w-2 h-2 rounded-full bg-blue-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]" />
                         Featured Builds
                     </div>
+
+                    {/* Main Headline */}
                     <h2
-                        className="text-[32px] sm:text-[40px] lg:text-[48px] font-bold leading-[1.05] tracking-[-0.03em]"
+                        className="text-[32px] sm:text-[36px] font-bold leading-[1.05] tracking-[-0.03em] md:text-[44px] lg:text-[48px]"
                         style={{ color: "var(--ink-900)" }}
                     >
                         Websites built for <br className="hidden sm:block" />
-                        <span className="relative inline-block text-transparent bg-clip-text" style={{ backgroundImage: "linear-gradient(to right, #00B0F0, #2563EB)" }}>
+                        <span className="relative inline-block text-[#00B0F0] mt-2">
                             booked jobs.
+                            {/* Blue Underline Highlight */}
+                            <span
+                                className="absolute left-0 bottom-1 w-full h-[30%] bg-[#00B0F0]/20 -z-10 rounded-sm"
+                            />
                         </span>
                     </h2>
-                    <p className="mt-4 text-[16px] sm:text-[18px] font-medium leading-[1.6] max-w-[600px] text-pretty mx-auto" style={{ color: "var(--text-600)" }}>
-                        We build high-velocity websites that rank locally and convert traffic into booked jobs.
+                    <p className="mt-5 sm:mt-6 max-w-[600px] text-[15px] sm:text-[17px] font-medium leading-[1.6] text-[var(--text-700)] text-center px-2 text-pretty mx-auto">
+                        We don't just build digital brochures. We build high-velocity assets that rank locally and convert traffic into booked jobs.
                     </p>
                 </div>
 
@@ -239,8 +239,6 @@ function ShowcaseView({ showcase }: { showcase: Showcase }) {
                     style={{ y: mobileY }}
                     className="absolute z-20 top-1/2 -translate-y-1/2 w-[160px] sm:w-[200px] rounded-[32px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.05),0_40px_80px_-20px_rgba(0,0,0,0.25)] border-[6px] border-slate-900 overflow-hidden right-0 sm:-right-8 lg:-right-4"
                 >
-                    {/* iPhone Notch */}
-                    <div className="absolute top-0 inset-x-0 h-5 bg-slate-900 w-[50%] mx-auto rounded-b-xl z-30" />
                     {/* Mobile Screenshot */}
                     <div className="relative aspect-[9/19.5] bg-slate-200 overflow-hidden">
                         <Image
@@ -251,6 +249,12 @@ function ShowcaseView({ showcase }: { showcase: Showcase }) {
                         />
                     </div>
                 </motion.div>
+
+                {/* Subtle Hover Indicator Arrow */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 lg:left-[45%] lg:-translate-x-0 z-30 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none hidden sm:flex flex-col items-center gap-2 text-slate-400">
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Hover</span>
+                    <ArrowDown className="w-4 h-4 animate-bounce" />
+                </div>
             </div>
 
             {/* ---- TEXT COLUMN (The Clean Narrative) ---- */}
