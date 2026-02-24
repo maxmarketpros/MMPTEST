@@ -5,6 +5,7 @@ import { TargetedTakeoverMap } from "@/components/targeted-takeover-map"
 import { GrowthCommandCenter } from "@/components/growth-command-center"
 import { PricingSection } from "@/components/pricing-section"
 import { OnboardingTimeline } from "@/components/onboarding-timeline"
+import { WebsiteShowcaseSection } from "@/components/website-showcase-section"
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <HeroSection />
       <CoreDeliverablesPillars />
       <TargetedTakeoverMap />
+      <WebsiteShowcaseSection />
       <PricingSection />
       <OnboardingTimeline />
       <GrowthCommandCenter />
